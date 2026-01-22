@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-import ProjectCard from '../components/ui/ProjectCard';
+import GalleryCard from '../components/ui/GalleryCard';
 import styles from './AllProjects.module.css';
 
 // Extended Dummy Data to simulate a full gallery
@@ -136,12 +136,13 @@ const AllProjects = () => {
                             transition={{ duration: 0.3 }}
                             className={styles.masonryItem}
                         >
-                            <ProjectCard
+                            <GalleryCard
                                 id={project.id}
                                 title={project.title}
                                 description={project.description}
                                 imageUrl={project.imageUrl}
                                 tags={project.tags}
+                                category={project.category}
                             />
                         </motion.div>
                     ))}
