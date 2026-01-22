@@ -1,0 +1,119 @@
+.stackWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4rem; /* Gap between cards logic is handled by sticky + padding mainly, but gap helps non-sticky fallback */
+  padding-bottom: 20vh; /* Extra scroll space at bottom */
+}
+
+.cardContainer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.card {
+  width: 900px;
+  max-width: 95vw; /* Responsive */
+  height: 500px;
+  border-radius: 30px;
+  overflow: hidden;
+  position: relative;
+  background: var(--bg-secondary);
+  box-shadow: 0 -10px 40px rgba(0,0,0,0.2);
+  border: 1px solid var(--glass-border);
+}
+
+.imageWrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.bgImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.card:hover .bgImage {
+  transform: scale(1.05); /* Parallax/Zoom feel */
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.9) 100%);
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  color: white;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.index {
+  font-size: 1.2rem;
+  font-weight: bold;
+  opacity: 0.5;
+}
+
+.header h2 {
+  font-size: 3rem;
+  margin: 0;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.body {
+  max-width: 600px;
+}
+
+.body p {
+  font-size: 1.25rem;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+  opacity: 0.9;
+}
+
+.tags {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.tags span {
+  padding: 0.5rem 1.2rem;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(5px);
+}
+
+@media (max-width: 768px) {
+  .card {
+     height: 450px;
+  }
+  .header h2 {
+      font-size: 2rem;
+  }
+}

@@ -4,6 +4,7 @@ import About from '../components/ui/About';
 import Experience from '../components/ui/Experience';
 import Contact from '../components/ui/Contact';
 import ProjectCard from '../components/ui/ProjectCard';
+import Hobbies from '../components/ui/Hobbies';
 import { motion } from 'framer-motion';
 
 const DUMMY_PROJECTS = [
@@ -89,6 +90,8 @@ const Home = () => {
                     ))}
                 </motion.div>
             </section>
+
+            <Hobbies />
 
             <Contact />
         </div>
