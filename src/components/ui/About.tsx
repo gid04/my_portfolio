@@ -7,7 +7,7 @@ const SERVICES = [
     {
         title: "UI/UX Design",
         slug: "ui-ux-design",
-        image: "https://images.unsplash.com/photo-1586717791821-3f44a5638d0f?q=80&w=2574&auto=format&fit=crop",
+        image: "/images/ui-ux-cover.jpg",
         description: "Crafting intuitive and aesthetically pleasing digital experiences."
     },
     {
