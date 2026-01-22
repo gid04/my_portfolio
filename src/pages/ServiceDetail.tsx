@@ -8,7 +8,7 @@ import BackButton from '../components/ui/BackButton';
 const SERVICE_DATA: Record<string, any> = {
     'ui-ux-design': {
         title: "UI/UX Design",
-        images: ["https://images.unsplash.com/photo-1586717791821-3f44a5638d0f?q=80&w=2574&auto=format&fit=crop", "https://images.unsplash.com/photo-1559028012-481c04fa702d?q=80&w=2536&auto=format&fit=crop"],
+        images: ["/images/ui-ux-cover.jpg", "https://images.unsplash.com/photo-1559028012-481c04fa702d?q=80&w=2536&auto=format&fit=crop"],
         overview: "I craft intuitive and aesthetically pleasing digital experiences that drive engagement and business growth.",
         description: "My UI/UX design process is rooted in user empathy and data-driven insights. I believe that great design is invisible—it just works. From complex enterprise dashboards to consumer-facing mobile apps, I focus on clarity, usability, and delight.",
         experience: [
