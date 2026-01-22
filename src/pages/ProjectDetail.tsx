@@ -1,4 +1,5 @@
 import { useParams, Link } from 'react-router-dom';
+import BackButton from '../components/ui/BackButton';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
 
@@ -74,18 +75,9 @@ const ProjectDetail = () => {
                 }}></div>
 
                 <div className="container" style={{ position: 'absolute', bottom: '2rem', left: '0', right: '0' }}>
-                    <Link to="/" style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        color: 'white',
-                        background: 'rgba(0,0,0,0.5)',
-                        padding: '0.5rem 1rem',
-                        borderRadius: '50px',
-                        backdropFilter: 'blur(10px)',
-                        marginBottom: '2rem'
-                    }}>
-                        &larr; Back
-                    </Link>
+                    <div style={{ marginBottom: '2rem' }}>
+                        <BackButton />
+                    </div>
                     <motion.h1
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}

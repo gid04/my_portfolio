@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 import GalleryCard from '../components/ui/GalleryCard';
+import BackButton from '../components/ui/BackButton';
 import styles from './AllProjects.module.css';
 
 // Extended Dummy Data to simulate a full gallery
@@ -90,6 +91,9 @@ const AllProjects = () => {
 
     return (
         <div className="container" style={{ paddingTop: '8rem', paddingBottom: '4rem' }}>
+            <div style={{ marginBottom: '2rem' }}>
+                <BackButton />
+            </div>
             <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
                 <h1 style={{ fontSize: '3rem', marginBottom: '1rem' }}>All Projects.</h1>
                 <p style={{ color: 'var(--text-secondary)' }}>Explore my latest work across design and development.</p>

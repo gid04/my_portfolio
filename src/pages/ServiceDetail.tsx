@@ -2,6 +2,7 @@ import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useEffect } from 'react';
 import ParallaxCarousel from '../components/ui/ParallaxCarousel';
+import BackButton from '../components/ui/BackButton';
 
 // Data could be moved to a shared file, but keeping here for speed/simplicity as per current pattern
 const SERVICE_DATA: Record<string, any> = {
@@ -86,9 +87,9 @@ const ServiceDetail = () => {
                     pointerEvents: 'none' // allow click through? No, links need events.
                 }}>
                     <div style={{ pointerEvents: 'auto' }}>
-                        <Link to="/#about" style={{ display: 'inline-flex', alignItems: 'center', marginBottom: '1rem', color: 'rgba(255,255,255,0.8)' }}>
-                            &larr; Back to Services
-                        </Link>
+                        <div style={{ marginBottom: '1rem', color: 'rgba(255,255,255,0.8)' }}>
+                            <BackButton />
+                        </div>
                         <motion.h1
                             initial={{ opacity: 0, y: 30 }}
                             animate={{ opacity: 1, y: 0 }}

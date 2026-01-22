@@ -7,10 +7,13 @@ import ProjectDetail from './pages/ProjectDetail';
 import ServiceDetail from './pages/ServiceDetail';
 import AllProjects from './pages/AllProjects';
 
+import ScrollToAnchor from './components/utils/ScrollToAnchor';
+
 function App() {
   return (
     <ThemeProvider>
       <Router>
+        <ScrollToAnchor />
         <Layout>
           <Routes>
             <Route path="/" element={<Home />} />
