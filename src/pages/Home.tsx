@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Hero from '../components/ui/Hero';
 import About from '../components/ui/About';
 import Experience from '../components/ui/Experience';
@@ -89,6 +90,20 @@ const Home = () => {
                         </motion.div>
                     ))}
                 </motion.div>
+
+                <div style={{ textAlign: 'center', marginTop: '4rem' }}>
+                    <Link to="/projects" className="btn-primary" style={{
+                        display: 'inline-block',
+                        padding: '1rem 2rem',
+                        background: 'var(--text-color)',
+                        color: 'var(--bg-color)',
+                        borderRadius: '50px',
+                        fontWeight: 'bold',
+                        textDecoration: 'none'
+                    }}>
+                        View All Projects
+                    </Link>
+                </div>
             </section>
 
             <Hobbies />

@@ -1,5 +1,4 @@
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { useRef } from 'react';
+import { motion } from 'framer-motion';
 import styles from './Hobbies.module.css';
 
 const HOBBIES = [
@@ -19,10 +18,10 @@ const HOBBIES = [
   },
   {
     title: "Music",
-    description: "From Lo-Fi beats for focusing to energetic tracks for workouts, music fuels my creativity.",
+    description: "Vibing to Gospel, Afrobeats, R&B, and the best of US & French Rap.",
     color: "#1DB954",
     image: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=2700&auto=format&fit=crop",
-    tags: ["Focus", "Inspiration", "Rhythm"]
+    tags: ["Gospel", "Afrobeats", "Rap"]
   },
   {
     title: "Drawing",
@@ -36,45 +35,45 @@ const HOBBIES = [
 const Card = ({ title, description, image, tags, index, total }: any) => {
   // Sticky 'top' calculation to create the stack effect
   // Each card sticks slightly lower than the previous one to show the "stack" header
-  const topOffset = 150 + (index * 40); 
-  
+  const topOffset = 150 + (index * 40);
+
   return (
-    <div 
+    <div
       className={styles.cardContainer}
-      style={{ 
-        position: 'sticky', 
+      style={{
+        position: 'sticky',
         top: `${topOffset}px`,
         marginBottom: `${(total - index) * 20}px` // Spacer to ensure scrolling room
       }}
     >
-        <motion.div 
-            className={styles.card}
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            viewport={{ once: true }}
-        >
-            <div className={styles.imageWrapper}>
-                <img src={image} alt={title} className={styles.bgImage} />
-                <div className={styles.overlay} />
+      <motion.div
+        className={styles.card}
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        viewport={{ once: true }}
+      >
+        <div className={styles.imageWrapper}>
+          <img src={image} alt={title} className={styles.bgImage} />
+          <div className={styles.overlay} />
+        </div>
+
+        <div className={styles.content}>
+          <div className={styles.header}>
+            <span className={styles.index}>0{index + 1}.</span>
+            <h2>{title}</h2>
+          </div>
+
+          <div className={styles.body}>
+            <p>{description}</p>
+            <div className={styles.tags}>
+              {tags.map((tag: string, i: number) => (
+                <span key={i} className="glass">{tag}</span>
+              ))}
             </div>
-            
-            <div className={styles.content}>
-                <div className={styles.header}>
-                    <span className={styles.index}>0{index + 1}.</span>
-                    <h2>{title}</h2>
-                </div>
-                
-                <div className={styles.body}>
-                    <p>{description}</p>
-                    <div className={styles.tags}>
-                        {tags.map((tag: string, i: number) => (
-                            <span key={i} className="glass">{tag}</span>
-                        ))}
-                    </div>
-                </div>
-            </div>
-        </motion.div>
+          </div>
+        </div>
+      </motion.div>
     </div>
   );
 };
@@ -82,28 +81,28 @@ const Card = ({ title, description, image, tags, index, total }: any) => {
 const Hobbies = () => {
   return (
     <section className="container section-padding" style={{ position: 'relative' }}>
-        <div style={{ marginBottom: '4rem', textAlign: 'center' }}>
-            <motion.h2 
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              className="section-title"
-              style={{ fontSize: '3rem', marginBottom: '1rem' }}
-            >
-                Beyond Design.
-            </motion.h2>
-            <p style={{ color: 'var(--text-secondary)' }}>What keeps me inspired offline.</p>
-        </div>
+      <div style={{ marginBottom: '4rem', textAlign: 'center' }}>
+        <motion.h2
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          className="section-title"
+          style={{ fontSize: '3rem', marginBottom: '1rem' }}
+        >
+          Beyond Design.
+        </motion.h2>
+        <p style={{ color: 'var(--text-secondary)' }}>What keeps me inspired offline.</p>
+      </div>
 
-        <div className={styles.stackWrapper}>
-            {HOBBIES.map((hobby, index) => (
-                <Card 
-                    key={index}
-                    index={index}
-                    total={HOBBIES.length}
-                    {...hobby}
-                />
-            ))}
-        </div>
+      <div className={styles.stackWrapper}>
+        {HOBBIES.map((hobby, index) => (
+          <Card
+            key={index}
+            index={index}
+            total={HOBBIES.length}
+            {...hobby}
+          />
+        ))}
+      </div>
     </section>
   );
 };
