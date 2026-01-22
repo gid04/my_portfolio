@@ -1,0 +1,104 @@
+.dockContainer {
+    position: fixed;
+    bottom: 2rem;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    z-index: 1000;
+    pointer-events: none;
+    /* Let clicks pass through outside the dock */
+}
+
+.dock {
+    pointer-events: auto;
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    background: rgba(10, 10, 10, 0.8);
+    /* Dark default */
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    gap: 1rem;
+    /* Override bg for theme using CSS var if needed, but 'glass' utility already does some work */
+    background: var(--bg-secondary);
+    /* Use theme secondary bg */
+}
+
+.links {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 0.8rem;
+    color: var(--text-secondary);
+    border-radius: 12px;
+    transition: all 0.2s ease;
+    position: relative;
+    min-width: 40px;
+}
+
+.link:hover {
+    color: var(--text-color);
+    background: rgba(255, 255, 255, 0.05);
+    transform: translateY(-2px);
+}
+
+.link svg {
+    margin-bottom: 2px;
+}
+
+.label {
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    font-weight: 600;
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
+    transition: opacity 0.2s ease;
+}
+
+.link:hover .label {
+    /* Optional: Show label on hover, or keep icons only for minimalist */
+    /* opacity: 1; height: auto; */
+}
+
+.divider {
+    width: 1px;
+    height: 24px;
+    background: var(--border-color);
+    margin: 0 0.5rem;
+}
+
+.themeToggle {
+    background: transparent;
+    border: none;
+    color: var(--text-color);
+    padding: 0.5rem;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.themeToggle:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: rotate(15deg);
+}
+
+@media (max-width: 600px) {
+    .dock {
+        width: 90%;
+        justify-content: space-between;
+    }
+}

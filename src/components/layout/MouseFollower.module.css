@@ -1,0 +1,21 @@
+.cursor {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(2px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    pointer-events: none;
+    z-index: 9999;
+    mix-blend-mode: difference;
+    /* Cool effect over text */
+}
+
+@media (hover: none) {
+    .cursor {
+        display: none;
+    }
+}

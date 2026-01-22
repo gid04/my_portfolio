@@ -1,0 +1,62 @@
+.flipContainer {
+    perspective: 1000px;
+    height: 200px;
+    cursor: pointer;
+}
+
+.flipper {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+}
+
+.front,
+.back {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.front {
+    z-index: 2;
+    transform: rotateY(0deg);
+    background: var(--bg-secondary);
+    /* Ensure it's not transparent so back doesn't show */
+}
+
+.back {
+    transform: rotateY(180deg);
+    background: var(--text-color);
+    color: var(--bg-color);
+    /* Inverted colors for back */
+}
+
+.front h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.hint {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-top: 1rem;
+}
+
+.back p {
+    font-size: 1rem;
+    line-height: 1.5;
+}

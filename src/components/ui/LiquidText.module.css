@@ -1,0 +1,36 @@
+.liquidWrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.filterSvg {
+    position: absolute;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+}
+
+.text {
+    display: inline-block;
+    transition: all 0.5s ease;
+    /* Ideally we would animate the filter scale via JS/Framer, but CSS filter transition is tricky. 
+     Instead, we can toggle the filter on hover or use a CSS animation on a turbulence property if supported.
+     However, standard CSS 'filter: url(#id)' doesn't animate parameters easily.
+     
+     Wait, the 'liquid' effect requested usually implies active animation. 
+     For a simpler 'hover' effect without complex JS loop, let's use a trick: 
+     We can't animate SVG filter params via CSS easily.
+     
+     Let's use a simpler text-stroke / shadow wobble or just stick to applying the filter on hover statically.
+     Or better: Use a CSS clip-path or transform animation that mimics liquid.
+     
+     Actually, let's re-implement LiquidText.tsx to use Framer Motion or JS ref to animate the turbulence 
+     because static turbulence is ugly.
+  */
+}
+
+/* 
+  Since static SVG filter params are hard to animate with pure CSS,
+  we will implement the logic inside LiquidText.tsx using Framer Motion or Refs.
+  Creating a basic placeholder style here.
+*/

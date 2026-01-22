@@ -1,0 +1,13 @@
+.container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.mainContent {
+    flex: 1;
+    padding: var(--spacing-lg) var(--spacing-md);
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+}
