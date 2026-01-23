@@ -1,21 +1,31 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import BackButton from '../../components/ui/BackButton';
+import { useMutation } from "convex/react";
+import { api } from "../../../convex/_generated/api";
 
 const ProjectEditor = () => {
     const navigate = useNavigate();
+    const generateUploadUrl = useMutation(api.projects.generateUploadUrl);
+    const createProject = useMutation(api.projects.create);
+
     const [formData, setFormData] = useState({
         title: '',
-        imageUrl: '',
+        imageUrl: '', // still used for URL inputs if needed, but we prefer file uploads now
         role: '',
         industry: '',
-        category: 'UI/UX Design', // Default
+        category: 'UI/UX Design',
         tags: '',
         tools: [] as string[],
-        description: '', // Short desc
-        fullDescription: '', // Overview
+        description: '',
+        fullDescription: '',
         link: ''
     });
+
+    const [coverImageFile, setCoverImageFile] = useState<File | null>(null);
+    const [galleryFiles, setGalleryFiles] = useState<File[]>([]);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [uploadError, setUploadError] = useState('');
 
     const AVAILABLE_TOOLS = ['Figma', 'Antigravity', 'Adobe Illustrator', 'Adobe Photoshop', 'Framer', 'React', 'After Effects'];
     const CATEGORIES = ["UI/UX Design", "Web Design", "Brand Strategy", "Prototyping"];
@@ -39,31 +49,96 @@ const ProjectEditor = () => {
         }));
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleCoverImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]) {
+            setCoverImageFile(e.target.files[0]);
+        }
+    };
+
+    const handleGalleryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files) {
+            setGalleryFiles(prev => [...prev, ...Array.from(e.target.files as FileList)]);
+        }
+    };
+
+    const removeGalleryImage = (index: number) => {
+        setGalleryFiles(prev => prev.filter((_, i) => i !== index));
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setIsSubmitting(true);
+        setUploadError('');
 
-        const newProject = {
-            id: Date.now(),
-            ...formData,
-            // Ensure tags is array
-            tags: formData.tags.split(',').map(tag => tag.trim()).filter(t => t.length > 0)
-        };
+        try {
+            // 1. Upload Cover Image
+            let coverImageId = undefined;
+            if (coverImageFile) {
+                const postUrl = await generateUploadUrl();
+                const result = await fetch(postUrl, {
+                    method: "POST",
+                    headers: { "Content-Type": coverImageFile.type },
+                    body: coverImageFile,
+                });
+                const { storageId } = await result.json();
+                coverImageId = storageId;
+            }
 
-        const existingProjects = JSON.parse(localStorage.getItem('projects') || '[]');
-        localStorage.setItem('projects', JSON.stringify([...existingProjects, newProject]));
+            // 2. Upload Gallery Images
+            const galleryImageIds = [];
+            for (const file of galleryFiles) {
+                const postUrl = await generateUploadUrl();
+                const result = await fetch(postUrl, {
+                    method: "POST",
+                    headers: { "Content-Type": file.type },
+                    body: file,
+                });
+                const { storageId } = await result.json();
+                galleryImageIds.push(storageId);
+            }
 
-        navigate('/admin/dashboard');
+            // 3. Create Project Record
+            await createProject({
+                title: formData.title,
+                description: formData.description,
+                fullDescription: formData.fullDescription,
+                role: formData.role,
+                industry: formData.industry,
+                category: formData.category,
+                tags: formData.tags.split(',').map(tag => tag.trim()).filter(t => t.length > 0),
+                tools: formData.tools,
+                link: formData.link,
+                imageUrl: formData.imageUrl, // legacy or external URL
+                coverImageId: coverImageId,
+                galleryImageIds: galleryImageIds,
+            });
+
+            navigate('/admin/dashboard');
+        } catch (err) {
+            console.error(err);
+            setUploadError('Failed to upload project. Please try again.');
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
         <div className="container" style={{ paddingTop: '8rem', paddingBottom: '4rem', maxWidth: '800px' }}>
             <div style={{ marginBottom: '2rem' }}>
-                <button onClick={() => navigate('/admin/dashboard')} style={{ background: 'none', border: 'none', color: 'var(--text-color)', cursor: 'pointer', fontSize: '1rem' }}>&larr; Back to Dashboard</button>
+                <BackButton />
             </div>
 
             <h1 style={{ marginBottom: '2rem' }}>Add New Project.</h1>
+            {uploadError && <p style={{ color: 'red', marginBottom: '1rem' }}>{uploadError}</p>}
 
             <form onSubmit={handleSubmit} className="glass" style={{ padding: '2rem', borderRadius: '20px', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+
+                {/* Cover Image */}
+                <div>
+                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Cover Image *</label>
+                    <input type="file" accept="image/*" onChange={handleCoverImageChange} required={!formData.imageUrl} />
+                    {formData.imageUrl && <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Or using external URL: {formData.imageUrl}</p>}
+                </div>
 
                 {/* Basic Info */}
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
@@ -79,9 +154,19 @@ const ProjectEditor = () => {
                     </div>
                 </div>
 
-                <div>
-                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Cover Image URL *</label>
-                    <input name="imageUrl" type="url" placeholder="https://..." value={formData.imageUrl} onChange={handleChange} required style={{ width: '100%', padding: '0.8rem', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'var(--bg-secondary)', color: 'var(--text-color)' }} />
+                {/* Gallery */}
+                <div style={{ background: 'rgba(255,255,255,0.05)', padding: '1rem', borderRadius: '10px' }}>
+                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Project Gallery (Images)</label>
+                    <input type="file" accept="image/*" multiple onChange={handleGalleryChange} style={{ marginBottom: '1rem' }} />
+
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                        {galleryFiles.map((file, idx) => (
+                            <div key={idx} style={{ position: 'relative', width: '80px', height: '60px' }}>
+                                <img src={URL.createObjectURL(file)} alt="preview" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '4px' }} />
+                                <button type="button" onClick={() => removeGalleryImage(idx)} style={{ position: 'absolute', top: '-5px', right: '-5px', background: 'red', color: 'white', border: 'none', borderRadius: '50%', width: '20px', height: '20px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px' }}>X</button>
+                            </div>
+                        ))}
+                    </div>
                 </div>
 
                 {/* Details */}
@@ -143,9 +228,12 @@ const ProjectEditor = () => {
                 </div>
 
                 <div style={{ marginTop: '1rem' }}>
-                    <button type="submit" className="btn-primary" style={{ width: '100%', padding: '1rem', borderRadius: '8px', background: 'var(--text-color)', color: 'var(--bg-color)', fontSize: '1.1rem', fontWeight: 'bold', border: 'none', cursor: 'pointer' }}>
-                        Publish Project
+                    <button type="submit" disabled={isSubmitting} className="btn-primary" style={{ width: '100%', padding: '1rem', borderRadius: '8px', background: 'var(--text-color)', color: 'var(--bg-color)', fontSize: '1.1rem', fontWeight: 'bold', border: 'none', cursor: isSubmitting ? 'not-allowed' : 'pointer', opacity: isSubmitting ? 0.7 : 1 }}>
+                        {isSubmitting ? 'Uploading...' : 'Publish Project'}
                     </button>
+                    <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '0.5rem', textAlign: 'center' }}>
+                        Note: Large images might take a moment to upload.
+                    </p>
                 </div>
 
             </form>
