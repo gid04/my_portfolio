@@ -35,7 +35,7 @@ function App() {
             <Route path="/upload" element={<Upload />} />
             <Route path="/projects" element={<AllProjects />} />
             <Route path="/project/:id" element={<ProjectDetail />} />
-            <Route path="/service/:slug" element={<ServiceDetail />} />
+            <Route path="/service/:id" element={<ServiceDetail />} />
           </Routes>
         </Layout>
       </Router>

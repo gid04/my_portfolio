@@ -69,10 +69,10 @@ const About = () => {
                     {services.map((service: any) => (
                         <ServiceCard
                             key={service._id}
+                            id={service._id}
                             title={service.title}
                             description={service.overview}
                             image={service.imageUrl}
-                            slug={service.title.toLowerCase().replace(/\s+/g, '-')}
                         />
                     ))}
                 </div>

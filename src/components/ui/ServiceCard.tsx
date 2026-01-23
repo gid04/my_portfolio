@@ -3,20 +3,20 @@ import { Link } from 'react-router-dom';
 import styles from './ServiceCard.module.css';
 
 interface ServiceCardProps {
+    id: string;
     title: string;
     description: string;
     image: string;
-    slug: string;
 }
 
-const ServiceCard: React.FC<ServiceCardProps> = ({ title, description, image, slug }) => {
+const ServiceCard: React.FC<ServiceCardProps> = ({ id, title, description, image }) => {
     return (
         <motion.div
             className={styles.cardContainer}
             whileHover={{ scale: 1.02 }}
             transition={{ type: 'spring', stiffness: 300, damping: 20 }}
         >
-            <Link to={`/service/${slug}`} className={styles.link}>
+            <Link to={`/service/${id}`} className={styles.link}>
                 <div className={styles.card}>
                     <img src={image} alt={title} className={styles.bgImage} />
                     <div className={styles.content}>
