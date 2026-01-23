@@ -1,4 +1,4 @@
-import { mutation, internalMutation } from "./_generated/server";
+import { mutation } from "./_generated/server";
 
 // Hardcoded data from frontend
 const DUMMY_PROJECTS = [

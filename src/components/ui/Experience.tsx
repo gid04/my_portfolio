@@ -1,7 +1,7 @@
 
 import { motion } from 'framer-motion';
 import { useQuery } from "convex/react";
-import { api } from "../../convex/_generated/api";
+import { api } from "../../../convex/_generated/api";
 
 const Experience = () => {
     const experiences = useQuery(api.content.getExperiences) || [];
