@@ -60,7 +60,7 @@ const ProjectDetail = () => {
             </div>
 
             <div className="container" style={{ marginTop: '4rem' }}>
-                <div style={{ display: 'grid', gridTemplateColumns: 'minmax(300px, 1fr) 2fr', gap: '4rem', position: 'relative' }}>
+                <div className="responsive-grid-sidebar">
 
                     {/* Sticky Sidebar */}
                     <div style={{ position: 'sticky', top: '2rem', height: 'fit-content' }}>

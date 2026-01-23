@@ -37,6 +37,12 @@
     padding: 0;
 }
 
+@media (max-width: 768px) {
+    .navLinks {
+        display: none;
+    }
+}
+
 .navLinks a {
     font-size: 0.9rem;
     font-weight: 500;

@@ -29,12 +29,9 @@ const Home = () => {
                     whileInView={{ opacity: 1 }}
                     viewport={{ once: true }}
                     transition={{ staggerChildren: 0.2 }}
-                    style={{
-                        display: 'grid',
-                        gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))',
-                        columnGap: '2rem',
-                        rowGap: '4rem'
-                    }}
+
+                    className="responsive-grid-cards"
+
                 >
                     {projects.slice(0, 3).map(project => (
                         <motion.div
