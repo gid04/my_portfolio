@@ -1,17 +1,23 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import BackButton from '../../components/ui/BackButton';
-import { useMutation } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 
 const ProjectEditor = () => {
     const navigate = useNavigate();
+    const { id } = useParams();
+    const isEditMode = !!id;
+
     const generateUploadUrl = useMutation(api.projects.generateUploadUrl);
     const createProject = useMutation(api.projects.create);
+    const updateProject = useMutation(api.projects.update);
+
+    const existingProject = useQuery(api.projects.getById, isEditMode ? { id: id as any } : "skip");
 
     const [formData, setFormData] = useState({
         title: '',
-        imageUrl: '', // still used for URL inputs if needed, but we prefer file uploads now
+        imageUrl: '',
         role: '',
         industry: '',
         category: 'UI/UX Design',
@@ -34,6 +40,23 @@ const ProjectEditor = () => {
         const isAdmin = sessionStorage.getItem('isAdmin');
         if (!isAdmin) navigate('/admin');
     }, [navigate]);
+
+    useEffect(() => {
+        if (existingProject) {
+            setFormData({
+                title: existingProject.title,
+                imageUrl: existingProject.imageUrl || '',
+                role: existingProject.role || '',
+                industry: existingProject.industry || '',
+                category: existingProject.category,
+                tags: existingProject.tags.join(', '),
+                tools: existingProject.tools,
+                description: existingProject.description,
+                fullDescription: existingProject.fullDescription || '',
+                link: existingProject.link || ''
+            });
+        }
+    }, [existingProject]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -71,8 +94,8 @@ const ProjectEditor = () => {
         setUploadError('');
 
         try {
-            // 1. Upload Cover Image
-            let coverImageId = undefined;
+            // 1. Upload Cover Image (if new one selected)
+            let coverImageId = isEditMode ? undefined : undefined; // Start undefined
             if (coverImageFile) {
                 const postUrl = await generateUploadUrl();
                 const result = await fetch(postUrl, {
@@ -97,8 +120,7 @@ const ProjectEditor = () => {
                 galleryImageIds.push(storageId);
             }
 
-            // 3. Create Project Record
-            await createProject({
+            const commonData = {
                 title: formData.title,
                 description: formData.description,
                 fullDescription: formData.fullDescription,
@@ -108,15 +130,29 @@ const ProjectEditor = () => {
                 tags: formData.tags.split(',').map(tag => tag.trim()).filter(t => t.length > 0),
                 tools: formData.tools,
                 link: formData.link,
-                imageUrl: formData.imageUrl, // legacy or external URL
-                coverImageId: coverImageId,
-                galleryImageIds: galleryImageIds,
-            });
+                imageUrl: formData.imageUrl,
+            };
+
+            if (isEditMode && id) {
+                await updateProject({
+                    id: id as any,
+                    ...commonData,
+                    coverImageId: coverImageId,
+                    ...(coverImageId ? { coverImageId } : {}),
+                    ...(galleryImageIds.length > 0 ? { galleryImageIds } : {}),
+                });
+            } else {
+                await createProject({
+                    ...commonData,
+                    coverImageId: coverImageId,
+                    galleryImageIds: galleryImageIds,
+                });
+            }
 
             navigate('/admin/dashboard');
         } catch (err) {
             console.error(err);
-            setUploadError('Failed to upload project. Please try again.');
+            setUploadError('Failed to save project. Please try again.');
         } finally {
             setIsSubmitting(false);
         }
@@ -128,15 +164,15 @@ const ProjectEditor = () => {
                 <BackButton />
             </div>
 
-            <h1 style={{ marginBottom: '2rem' }}>Add New Project.</h1>
+            <h1 style={{ marginBottom: '2rem' }}>{isEditMode ? 'Edit Project' : 'Add New Project'}</h1>
             {uploadError && <p style={{ color: 'red', marginBottom: '1rem' }}>{uploadError}</p>}
 
             <form onSubmit={handleSubmit} className="glass" style={{ padding: '2rem', borderRadius: '20px', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
 
                 {/* Cover Image */}
                 <div>
-                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Cover Image *</label>
-                    <input type="file" accept="image/*" onChange={handleCoverImageChange} required={!formData.imageUrl} />
+                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Cover Image {isEditMode ? '(Leave empty to keep existing)' : '*'}</label>
+                    <input type="file" accept="image/*" onChange={handleCoverImageChange} required={!isEditMode && !formData.imageUrl} />
                     {formData.imageUrl && <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Or using external URL: {formData.imageUrl}</p>}
                 </div>
 
@@ -229,7 +265,7 @@ const ProjectEditor = () => {
 
                 <div style={{ marginTop: '1rem' }}>
                     <button type="submit" disabled={isSubmitting} className="btn-primary" style={{ width: '100%', padding: '1rem', borderRadius: '8px', background: 'var(--text-color)', color: 'var(--bg-color)', fontSize: '1.1rem', fontWeight: 'bold', border: 'none', cursor: isSubmitting ? 'not-allowed' : 'pointer', opacity: isSubmitting ? 0.7 : 1 }}>
-                        {isSubmitting ? 'Uploading...' : 'Publish Project'}
+                        {isSubmitting ? 'Uploading...' : (isEditMode ? 'Update Project' : 'Publish Project')}
                     </button>
                     <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '0.5rem', textAlign: 'center' }}>
                         Note: Large images might take a moment to upload.

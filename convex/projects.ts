@@ -88,3 +88,25 @@ export const remove = mutation({
         await ctx.db.delete(args.id);
     },
 });
+
+export const update = mutation({
+    args: {
+        id: v.id("projects"),
+        title: v.string(),
+        description: v.string(),
+        fullDescription: v.optional(v.string()),
+        role: v.optional(v.string()),
+        industry: v.optional(v.string()),
+        category: v.string(),
+        tags: v.array(v.string()),
+        tools: v.array(v.string()),
+        link: v.optional(v.string()),
+        imageUrl: v.optional(v.string()),
+        coverImageId: v.optional(v.id("_storage")),
+        galleryImageIds: v.optional(v.array(v.id("_storage"))),
+    },
+    handler: async (ctx, args) => {
+        const { id, ...fields } = args;
+        await ctx.db.patch(id, fields);
+    },
+});

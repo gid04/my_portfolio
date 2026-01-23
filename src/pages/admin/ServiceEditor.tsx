@@ -1,17 +1,19 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import BackButton from '../../components/ui/BackButton';
-import { useMutation } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 
 const ServiceEditor = () => {
     const navigate = useNavigate();
+    const { id } = useParams();
+    const isEditMode = !!id;
+
     const generateUploadUrl = useMutation(api.projects.generateUploadUrl);
     const createService = useMutation(api.content.createService);
+    const updateService = useMutation(api.content.updateService);
 
-    // For selecting related items (optional future enhancement)
-    // const projects = useQuery(api.projects.get);
-    // const experiences = useQuery(api.content.getExperiences);
+    const existingService = useQuery(api.content.getServiceById, isEditMode ? { id: id as any } : "skip");
 
     const [formData, setFormData] = useState({
         title: '',
@@ -30,6 +32,17 @@ const ServiceEditor = () => {
         const isAdmin = sessionStorage.getItem('isAdmin');
         if (!isAdmin) navigate('/admin');
     }, [navigate]);
+
+    useEffect(() => {
+        if (existingService) {
+            setFormData({
+                title: existingService.title,
+                overview: existingService.overview,
+                tools: existingService.tools,
+                callToAction: existingService.callToAction || '',
+            });
+        }
+    }, [existingService]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
@@ -68,18 +81,30 @@ const ServiceEditor = () => {
                 coverImageId = storageId;
             }
 
-            await createService({
+            const commonData = {
                 title: formData.title,
                 overview: formData.overview,
                 tools: formData.tools,
                 callToAction: formData.callToAction,
-                coverImageId: coverImageId,
-            });
+            };
+
+            if (isEditMode && id) {
+                await updateService({
+                    id: id as any,
+                    ...commonData,
+                    ...(coverImageId ? { coverImageId } : {})
+                });
+            } else {
+                await createService({
+                    ...commonData,
+                    coverImageId: coverImageId,
+                });
+            }
 
             navigate('/admin/dashboard');
         } catch (error) {
             console.error(error);
-            alert("Failed to create service");
+            alert("Failed to save service");
         } finally {
             setIsSubmitting(false);
         }
@@ -88,7 +113,7 @@ const ServiceEditor = () => {
     return (
         <div className="container" style={{ paddingTop: '8rem', paddingBottom: '4rem', maxWidth: '800px' }}>
             <BackButton />
-            <h1 style={{ margin: '2rem 0' }}>Add New Service</h1>
+            <h1 style={{ margin: '2rem 0' }}>{isEditMode ? 'Edit Service' : 'Add New Service'}</h1>
 
             <form onSubmit={handleSubmit} className="glass" style={{ padding: '2rem', borderRadius: '20px', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                 <div>
@@ -97,8 +122,8 @@ const ServiceEditor = () => {
                 </div>
 
                 <div>
-                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Cover Image *</label>
-                    <input type="file" accept="image/*" onChange={handleCoverImageChange} required />
+                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Cover Image {isEditMode ? '(Leave empty to keep existing)' : '*'}</label>
+                    <input type="file" accept="image/*" onChange={handleCoverImageChange} required={!isEditMode} />
                 </div>
 
                 <div>
@@ -136,7 +161,7 @@ const ServiceEditor = () => {
                 </div>
 
                 <button type="submit" disabled={isSubmitting} className="btn-primary" style={{ width: '100%', padding: '1rem', borderRadius: '8px', background: 'var(--text-color)', color: 'var(--bg-color)', fontWeight: 'bold', border: 'none', cursor: isSubmitting ? 'not-allowed' : 'pointer', opacity: isSubmitting ? 0.7 : 1 }}>
-                    {isSubmitting ? 'Creating...' : 'Create Service'}
+                    {isSubmitting ? 'Saving...' : (isEditMode ? 'Update Service' : 'Create Service')}
                 </button>
             </form>
         </div>

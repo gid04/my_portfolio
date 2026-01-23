@@ -110,7 +110,10 @@ const AdminDashboard = () => {
                                             <td style={{ padding: '1rem' }}><img src={item.imageUrl} alt="" style={{ width: '60px', height: '40px', objectFit: 'cover', borderRadius: '4px' }} /></td>
                                             <td style={{ padding: '1rem', fontWeight: 'bold' }}>{item.title}</td>
                                             <td style={{ padding: '1rem', color: 'var(--text-secondary)' }}>{item.category}</td>
-                                            <td style={{ padding: '1rem' }}><button onClick={() => handleDelete('project', item._id)} style={{ color: 'red', background: 'none', border: '1px solid red', borderRadius: '4px', padding: '0.2rem 0.6rem', cursor: 'pointer' }}>Delete</button></td>
+                                            <td style={{ padding: '1rem', display: 'flex', gap: '0.5rem' }}>
+                                                <button onClick={() => navigate(`/admin/projects/${item._id}`)} style={{ background: 'none', border: '1px solid var(--text-color)', borderRadius: '4px', padding: '0.2rem 0.6rem', cursor: 'pointer', color: 'var(--text-color)' }}>Edit</button>
+                                                <button onClick={() => handleDelete('project', item._id)} style={{ color: 'red', background: 'none', border: '1px solid red', borderRadius: '4px', padding: '0.2rem 0.6rem', cursor: 'pointer' }}>Delete</button>
+                                            </td>
                                         </tr>
                                     ))}
                                 </tbody>
@@ -142,7 +145,10 @@ const AdminDashboard = () => {
                                             <td style={{ padding: '1rem' }}><img src={item.imageUrl} alt="" style={{ width: '60px', height: '40px', objectFit: 'cover', borderRadius: '4px' }} /></td>
                                             <td style={{ padding: '1rem', fontWeight: 'bold' }}>{item.title}</td>
                                             <td style={{ padding: '1rem', color: 'var(--text-secondary)' }}>{item.tools?.join(', ')}</td>
-                                            <td style={{ padding: '1rem' }}><button onClick={() => handleDelete('service', item._id)} style={{ color: 'red', background: 'none', border: '1px solid red', borderRadius: '4px', padding: '0.2rem 0.6rem', cursor: 'pointer' }}>Delete</button></td>
+                                            <td style={{ padding: '1rem', display: 'flex', gap: '0.5rem' }}>
+                                                <button onClick={() => navigate(`/admin/services/${item._id}`)} style={{ background: 'none', border: '1px solid var(--text-color)', borderRadius: '4px', padding: '0.2rem 0.6rem', cursor: 'pointer', color: 'var(--text-color)' }}>Edit</button>
+                                                <button onClick={() => handleDelete('service', item._id)} style={{ color: 'red', background: 'none', border: '1px solid red', borderRadius: '4px', padding: '0.2rem 0.6rem', cursor: 'pointer' }}>Delete</button>
+                                            </td>
                                         </tr>
                                     ))}
                                 </tbody>
@@ -174,7 +180,10 @@ const AdminDashboard = () => {
                                             <td style={{ padding: '1rem', fontWeight: 'bold' }}>{item.role}</td>
                                             <td style={{ padding: '1rem' }}>{item.company}</td>
                                             <td style={{ padding: '1rem', color: 'var(--text-secondary)' }}>{item.period}</td>
-                                            <td style={{ padding: '1rem' }}><button onClick={() => handleDelete('experience', item._id)} style={{ color: 'red', background: 'none', border: '1px solid red', borderRadius: '4px', padding: '0.2rem 0.6rem', cursor: 'pointer' }}>Delete</button></td>
+                                            <td style={{ padding: '1rem', display: 'flex', gap: '0.5rem' }}>
+                                                <button onClick={() => navigate(`/admin/experience/${item._id}`)} style={{ background: 'none', border: '1px solid var(--text-color)', borderRadius: '4px', padding: '0.2rem 0.6rem', cursor: 'pointer', color: 'var(--text-color)' }}>Edit</button>
+                                                <button onClick={() => handleDelete('experience', item._id)} style={{ color: 'red', background: 'none', border: '1px solid red', borderRadius: '4px', padding: '0.2rem 0.6rem', cursor: 'pointer' }}>Delete</button>
+                                            </td>
                                         </tr>
                                     ))}
                                 </tbody>

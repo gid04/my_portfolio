@@ -27,8 +27,11 @@ function App() {
             <Route path="/admin" element={<AdminLogin />} />
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
             <Route path="/admin/new" element={<ProjectEditor />} />
+            <Route path="/admin/projects/:id" element={<ProjectEditor />} />
             <Route path="/admin/services/new" element={<ServiceEditor />} />
+            <Route path="/admin/services/:id" element={<ServiceEditor />} />
             <Route path="/admin/experience/new" element={<ExperienceEditor />} />
+            <Route path="/admin/experience/:id" element={<ExperienceEditor />} />
             <Route path="/upload" element={<Upload />} />
             <Route path="/projects" element={<AllProjects />} />
             <Route path="/project/:id" element={<ProjectDetail />} />
