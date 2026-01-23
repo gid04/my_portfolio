@@ -40,7 +40,7 @@ const Hero = () => {
                         transition={{ delay: 0.5 }}
                     >
                         <h1 className={styles.title}>
-                            <LiquidText><TypingText text="UI/UX Designer" /></LiquidText> <br />
+                            <LiquidText><TypingText text="UX/UI Designer" /></LiquidText> <br />
                             <span style={{ opacity: 0.5 }}>& Brand Strategist.</span>
                         </h1>
                     </motion.div>
