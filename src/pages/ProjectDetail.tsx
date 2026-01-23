@@ -134,11 +134,23 @@ const ProjectDetail = () => {
                         <p style={{ fontSize: '1.1rem', lineHeight: '1.8', color: 'var(--text-secondary)', marginBottom: '2rem' }}>
                             {project.fullDescription || project.description}
                         </p>
-                        <p style={{ fontSize: '1.1rem', lineHeight: '1.8', color: 'var(--text-secondary)' }}>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                        </p>
+
+                        {project.gallery && project.gallery.length > 0 && (
+                            <div style={{ margin: '4rem 0' }}>
+                                <h3 style={{ fontSize: '1.5rem', marginBottom: '1.5rem' }}>Gallery</h3>
+                                <div style={{
+                                    display: 'grid',
+                                    gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+                                    gap: '1.5rem'
+                                }}>
+                                    {project.gallery.map((img: string, idx: number) => (
+                                        <div key={idx} style={{ borderRadius: '12px', overflow: 'hidden' }}>
+                                            <img src={img} alt={`Gallery ${idx}`} style={{ width: '100%', height: 'auto', display: 'block' }} />
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
 
                         {project.link && (
                             <motion.a
