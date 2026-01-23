@@ -28,6 +28,11 @@ const ProjectDetail = () => {
 
     return (
         <div ref={containerRef} style={{ minHeight: '100vh', paddingBottom: '10rem' }}>
+            {/* Mobile Sticky Back Button */}
+            <div className="mobile-fixed-top-left mobile-only">
+                <BackButton />
+            </div>
+
             {/* Immersive Hero */}
             <div style={{ height: '60vh', overflow: 'hidden', position: 'relative' }}>
                 <motion.img
@@ -45,7 +50,7 @@ const ProjectDetail = () => {
                 }}></div>
 
                 <div className="container" style={{ position: 'absolute', bottom: '2rem', left: '0', right: '0' }}>
-                    <div style={{ marginBottom: '2rem' }}>
+                    <div style={{ marginBottom: '2rem' }} className="desktop-only">
                         <BackButton />
                     </div>
                     <motion.h1
@@ -63,7 +68,7 @@ const ProjectDetail = () => {
                 <div className="responsive-grid-sidebar">
 
                     {/* Sticky Sidebar */}
-                    <div style={{ position: 'sticky', top: '2rem', height: 'fit-content' }}>
+                    <div className="sticky-sidebar">
                         <motion.div
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
@@ -129,6 +134,7 @@ const ProjectDetail = () => {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.6 }}
+                        className="mobile-center"
                     >
                         <h2 style={{ fontSize: '2rem', marginBottom: '1.5rem' }}>Overview</h2>
                         <p style={{ fontSize: '1.1rem', lineHeight: '1.8', color: 'var(--text-secondary)', marginBottom: '4rem', whiteSpace: 'pre-wrap' }}>

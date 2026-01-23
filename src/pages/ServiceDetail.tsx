@@ -19,6 +19,12 @@ const ServiceDetail = () => {
 
     return (
         <div style={{ minHeight: '100vh', paddingBottom: '10rem' }}>
+            {/* Mobile Sticky Header (Back + Title) */}
+            <div className="mobile-sticky-header-bar mobile-only">
+                <BackButton />
+                <h2 style={{ fontSize: '1.2rem', margin: 0 }}>{service.title}</h2>
+            </div>
+
             {/* Immersive Hero */}
             <div style={{ height: '50vh', overflow: 'hidden', position: 'relative' }}>
                 <motion.img
@@ -57,7 +63,7 @@ const ServiceDetail = () => {
                 <div className="responsive-grid-sidebar">
 
                     {/* Sidebar / Tools */}
-                    <div style={{ position: 'sticky', top: '2rem', height: 'fit-content' }}>
+                    <div className="sticky-sidebar">
                         <motion.div
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
@@ -80,7 +86,7 @@ const ServiceDetail = () => {
                             {service.callToAction && (
                                 <div style={{ marginTop: '2rem', paddingTop: '1.5rem', borderTop: '1px solid var(--border-color)' }}>
                                     <p style={{ marginBottom: '1rem', fontStyle: 'italic', color: 'var(--text-secondary)' }}>Interested in this service?</p>
-                                    <a href="mailto:hello@gideon.design" className="btn-primary" style={{ display: 'block', textAlign: 'center', padding: '0.8rem', borderRadius: '8px', background: 'var(--text-color)', color: 'var(--bg-color)', fontWeight: 'bold', textDecoration: 'none' }}>
+                                    <a href="mailto:hged04@gmail.com" className="btn-primary" style={{ display: 'block', textAlign: 'center', padding: '0.8rem', borderRadius: '8px', background: 'var(--text-color)', color: 'var(--bg-color)', fontWeight: 'bold', textDecoration: 'none' }}>
                                         {service.callToAction}
                                     </a>
                                 </div>
@@ -93,6 +99,7 @@ const ServiceDetail = () => {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.6 }}
+                        className="mobile-center"
                     >
                         <h2 style={{ fontSize: '2rem', marginBottom: '1.5rem' }}>Service Overview</h2>
                         <div style={{ fontSize: '1.2rem', lineHeight: '1.8', color: 'var(--text-secondary)', whiteSpace: 'pre-wrap' }}>
