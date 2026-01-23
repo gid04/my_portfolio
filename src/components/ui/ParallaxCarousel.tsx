@@ -1,53 +1,39 @@
-import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
-import { useEffect, useState, useRef } from 'react';
+import { useRef } from "react";
+import { motion, useTransform, useScroll } from "framer-motion";
 
-interface ParallaxCarouselProps {
-    images: string[];
-}
+const ParallaxCarousel = ({ images }: { images: string[] }) => {
+    const targetRef = useRef<HTMLDivElement | null>(null);
+    const { scrollYProgress } = useScroll({
+        target: targetRef,
+    });
 
-const ParallaxCarousel: React.FC<ParallaxCarouselProps> = ({ images }) => {
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const containerRef = useRef(null);
-
-    // Parallax effect
-    const { scrollY } = useScroll();
-    const y = useTransform(scrollY, [0, 500], [0, 200]); // Move down as we scroll
-
-    useEffect(() => {
-        if (images.length <= 1) return;
-
-        const interval = setInterval(() => {
-            setCurrentIndex((prev) => (prev + 1) % images.length);
-        }, 5000); // Change every 5 seconds
-
-        return () => clearInterval(interval);
-    }, [images]);
+    const x = useTransform(scrollYProgress, [0, 1], ["0%", "-50%"]);
 
     return (
-        <div ref={containerRef} style={{ width: '100%', height: '100%', position: 'relative', overflow: 'hidden' }}>
-            <motion.div style={{ width: '100%', height: '120%', y, position: 'relative', top: '-10%' }}>
-                <AnimatePresence initial={false}>
-                    <motion.img
-                        key={currentIndex}
-                        src={images[currentIndex]}
-                        alt="Service Background"
-                        initial={{ opacity: 0, scale: 1.1 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 1.5 }}
-                        style={{
-                            width: '100%',
-                            height: '100%',
-                            objectFit: 'cover',
-                            position: 'absolute',
-                            top: 0,
-                            left: 0,
-                            filter: 'brightness(0.6)'
-                        }}
-                    />
-                </AnimatePresence>
-            </motion.div>
-        </div>
+        <section ref={targetRef} style={{ position: "relative", height: "300vh" }}>
+            <div style={{ position: "sticky", top: 0, height: "100vh", display: "flex", alignItems: "center", overflow: "hidden" }}>
+                <motion.div style={{ x, display: "flex", gap: "2rem" }} className="flex">
+                    {images.map((img, idx) => (
+                        <div
+                            key={idx}
+                            style={{
+                                minWidth: "60vw",
+                                height: "60vh",
+                                borderRadius: "20px",
+                                overflow: "hidden",
+                                boxShadow: "0 10px 30px rgba(0,0,0,0.2)"
+                            }}
+                        >
+                            <img
+                                src={img}
+                                alt={`Slide ${idx}`}
+                                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                            />
+                        </div>
+                    ))}
+                </motion.div>
+            </div>
+        </section>
     );
 };
 

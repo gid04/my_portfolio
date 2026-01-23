@@ -48,8 +48,8 @@ const Home = () => {
 
             <section id="projects" className="section-padding container">
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '3rem' }}>
-                    <h2 style={{ fontSize: '2.5rem' }}>Selected Works.</h2>
-                    <span style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>2023 - 2026</span>
+                    <h2 style={{ fontSize: '2.5rem' }}>Top Projects.</h2>
+                    <span style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Selected Work</span>
                 </div>
 
                 <motion.div
@@ -64,7 +64,7 @@ const Home = () => {
                         rowGap: '4rem'
                     }}
                 >
-                    {projects.map(project => (
+                    {projects.slice(0, 3).map(project => (
                         <motion.div
                             key={project._id || project.id}
                             variants={{
