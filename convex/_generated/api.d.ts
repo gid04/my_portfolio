@@ -10,6 +10,7 @@
 
 import type * as content from "../content.js";
 import type * as projects from "../projects.js";
+import type * as seed from "../seed.js";
 
 import type {
   ApiFromModules,
@@ -20,6 +21,7 @@ import type {
 declare const fullApi: ApiFromModules<{
   content: typeof content;
   projects: typeof projects;
+  seed: typeof seed;
 }>;
 
 /**
