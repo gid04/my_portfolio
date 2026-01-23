@@ -6,10 +6,11 @@ interface GalleryStackProps {
 }
 
 const Card = ({ image, index, total }: { image: string, index: number, total: number }) => {
-    // Sticky 'top' calculation to create the stack effect
-    // We start a bit lower to clear any headers (e.g., top: 100px)
-    // Then add offset per card so they stack visibly.
-    const topOffset = 120 + (index * 40);
+    // Limit the stack effect depth to 3 cards
+    // Cards beyond index 3 will stick at the same position, effectively covering the pile
+    // rather than growing the pile indefinitely.
+    const effectiveIndex = Math.min(index, 3);
+    const topOffset = 120 + (effectiveIndex * 40);
 
     return (
         <div

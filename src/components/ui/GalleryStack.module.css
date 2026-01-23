@@ -12,9 +12,9 @@
 }
 
 .card {
-    width: 900px;
-    max-width: 95vw;
-    height: 600px;
+    width: 750px;
+    max-width: 90vw;
+    height: 500px;
     border-radius: 20px;
     overflow: hidden;
     position: relative;
