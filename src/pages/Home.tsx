@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import Hero from '../components/ui/Hero';
 import About from '../components/ui/About';
@@ -7,10 +6,12 @@ import Contact from '../components/ui/Contact';
 import ProjectCard from '../components/ui/ProjectCard';
 import Hobbies from '../components/ui/Hobbies';
 import { motion } from 'framer-motion';
+import { useQuery } from "convex/react";
+import { api } from "../../convex/_generated/api";
 
 const DUMMY_PROJECTS = [
     {
-        id: 1,
+        id: "1",
         title: 'Fintech Dashboard',
         description: 'A comprehensive dashboard for managing financial assets.',
         imageUrl: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2670&auto=format&fit=crop',
@@ -18,7 +19,7 @@ const DUMMY_PROJECTS = [
         link: '#'
     },
     {
-        id: 2,
+        id: "2",
         title: 'E-commerce App',
         description: 'Mobile-first shopping experience with seamless checkout.',
         imageUrl: 'https://images.unsplash.com/photo-1523206485973-279961db41e3?q=80&w=2670&auto=format&fit=crop',
@@ -26,7 +27,7 @@ const DUMMY_PROJECTS = [
         link: '#'
     },
     {
-        id: 3,
+        id: "3",
         title: 'Travel Agency',
         description: 'Immersive travel booking platform with virtual tours.',
         imageUrl: 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=2621&auto=format&fit=crop',
@@ -36,14 +37,8 @@ const DUMMY_PROJECTS = [
 ];
 
 const Home = () => {
-    const [projects, setProjects] = React.useState(DUMMY_PROJECTS);
-
-    React.useEffect(() => {
-        const savedProjects = JSON.parse(localStorage.getItem('projects') || '[]');
-        if (savedProjects.length > 0) {
-            setProjects([...savedProjects, ...DUMMY_PROJECTS]);
-        }
-    }, []);
+    const convexProjects = useQuery(api.projects.get) || [];
+    const projects = [...convexProjects, ...DUMMY_PROJECTS] as any[];
 
     return (
         <div>
@@ -71,7 +66,7 @@ const Home = () => {
                 >
                     {projects.map(project => (
                         <motion.div
-                            key={project.id}
+                            key={project._id || project.id}
                             variants={{
                                 hidden: { opacity: 0, y: 50 },
                                 visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
@@ -81,10 +76,10 @@ const Home = () => {
                             viewport={{ once: true }}
                         >
                             <ProjectCard
-                                id={project.id}
+                                id={project._id || project.id}
                                 title={project.title}
                                 description={project.description}
-                                imageUrl={project.imageUrl}
+                                imageUrl={project.imageUrl || ''}
                                 tags={project.tags}
                             />
                         </motion.div>

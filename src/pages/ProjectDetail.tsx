@@ -2,11 +2,14 @@ import { useParams, Link } from 'react-router-dom';
 import BackButton from '../components/ui/BackButton';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
+import { useQuery } from "convex/react";
+import { api } from "../../convex/_generated/api";
+import type { Id } from "../../convex/_generated/dataModel";
 
 // Using the same dummy data logic or moving to a context would be better, but keeping simple for now.
 const DUMMY_PROJECTS = [
     {
-        id: 1,
+        id: "1",
         title: 'Fintech Dashboard',
         description: 'A comprehensive dashboard for managing financial assets.',
         fullDescription: 'This fintech dashboard allows users to track their assets, view real-time market data, and manage their portfolio with ease. The design focuses on clarity and data legibility, using a strict monochrome palette to reduce cognitive load.',
@@ -15,7 +18,7 @@ const DUMMY_PROJECTS = [
         link: '#'
     },
     {
-        id: 2,
+        id: "2",
         title: 'E-commerce App',
         description: 'Mobile-first shopping experience with seamless checkout.',
         fullDescription: 'Designed for a seamless shopping experience on mobile devices. Key features include one-click checkout, personalized recommendations, and a clean product discovery interface.',
@@ -24,7 +27,7 @@ const DUMMY_PROJECTS = [
         link: '#'
     },
     {
-        id: 3,
+        id: "3",
         title: 'Travel Agency',
         description: 'Immersive travel booking platform with virtual tours.',
         fullDescription: 'An immersive web platform that lets users explore destinations through virtual tours before booking. The design uses large typography and high-quality imagery to inspire travel.',
@@ -38,11 +41,16 @@ const ProjectDetail = () => {
     const { id } = useParams();
     const containerRef = useRef(null);
 
-    // Try to find in localStorage first, then dummy
-    const savedProjects = JSON.parse(localStorage.getItem('projects') || '[]');
-    const allProjects = [...savedProjects, ...DUMMY_PROJECTS];
+    // Determines if ID is a valid Convex ID (usually longer alphanumeric) vs Dummy ID (short numeric string)
+    // This is a naive check. 
+    const isConvexId = id && id.length > 5;
 
-    const project = allProjects.find(p => p.id.toString() === id);
+    const convexProject = useQuery(api.projects.getById, isConvexId ? { id: id as Id<"projects"> } : "skip");
+
+    // Fallback to dummy
+    const dummyProject = DUMMY_PROJECTS.find(p => p.id === id);
+
+    const project = (isConvexId ? convexProject : dummyProject) as any;
 
     const { scrollYProgress } = useScroll({ target: containerRef });
     const y = useTransform(scrollYProgress, [0, 1], [0, 200]);
@@ -50,8 +58,8 @@ const ProjectDetail = () => {
     if (!project) {
         return (
             <div className="container" style={{ padding: '4rem 0', textAlign: 'center' }}>
-                <h1>Project not found.</h1>
-                <Link to="/" style={{ textDecoration: 'underline' }}>Go Home</Link>
+                <h1>Loading Project...</h1>
+                <Link to="/" style={{ textDecoration: 'underline' }}>Back to Home</Link>
             </div>
         );
     }

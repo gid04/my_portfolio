@@ -1,5 +1,7 @@
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useQuery } from "convex/react";
+import { api } from "../../convex/_generated/api";
 
 import GalleryCard from '../components/ui/GalleryCard';
 import BackButton from '../components/ui/BackButton';
@@ -8,7 +10,7 @@ import styles from './AllProjects.module.css';
 // Extended Dummy Data to simulate a full gallery
 const ALL_PROJECTS = [
     {
-        id: 1,
+        id: "1",
         title: 'Fintech Dashboard',
         description: 'A comprehensive dashboard for managing financial assets.',
         imageUrl: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2670&auto=format&fit=crop',
@@ -16,7 +18,7 @@ const ALL_PROJECTS = [
         category: 'UI/UX Design'
     },
     {
-        id: 2,
+        id: "2",
         title: 'E-commerce App',
         description: 'Mobile-first shopping experience with seamless checkout.',
         imageUrl: 'https://images.unsplash.com/photo-1523206485973-279961db41e3?q=80&w=2670&auto=format&fit=crop',
@@ -24,7 +26,7 @@ const ALL_PROJECTS = [
         category: 'Prototyping'
     },
     {
-        id: 3,
+        id: "3",
         title: 'Travel Agency',
         description: 'Immersive travel booking platform with virtual tours.',
         imageUrl: 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=2621&auto=format&fit=crop',
@@ -32,7 +34,7 @@ const ALL_PROJECTS = [
         category: 'Web Design'
     },
     {
-        id: 4,
+        id: "4",
         title: 'Health & Fitness Tracker',
         description: 'Tracking vitals and workouts with a clean, dark mode interface.',
         imageUrl: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=2670&auto=format&fit=crop',
@@ -40,7 +42,7 @@ const ALL_PROJECTS = [
         category: 'UI/UX Design'
     },
     {
-        id: 5,
+        id: "5",
         title: 'Architecture Portfolio',
         description: 'Minimalist site showcasing modern architectural projects.',
         imageUrl: 'https://images.unsplash.com/photo-1487958449943-2429e8be8625?q=80&w=2670&auto=format&fit=crop',
@@ -48,7 +50,7 @@ const ALL_PROJECTS = [
         category: 'Web Design'
     },
     {
-        id: 6,
+        id: "6",
         title: 'Crypto Exchange',
         description: 'Real-time trading platform with advanced charting.',
         imageUrl: 'https://images.unsplash.com/photo-1621763172657-bc811f81b6af?q=80&w=2670&auto=format&fit=crop',
@@ -56,7 +58,7 @@ const ALL_PROJECTS = [
         category: 'UI/UX Design'
     },
     {
-        id: 7,
+        id: "7",
         title: 'Restaurant Delivery',
         description: 'Hyper-local food delivery app with real-time tracking.',
         imageUrl: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=2670&auto=format&fit=crop',
@@ -64,7 +66,7 @@ const ALL_PROJECTS = [
         category: 'Prototyping'
     },
     {
-        id: 8,
+        id: "8",
         title: 'Eco-Friendly Brand',
         description: 'Brand identity and packaging for sustainable goods.',
         imageUrl: 'https://images.unsplash.com/photo-1542601906990-b4d3fb7d5fa5?q=80&w=2626&auto=format&fit=crop',
@@ -79,15 +81,18 @@ const AllProjects = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [activeCategory, setActiveCategory] = useState("All");
 
+    const convexProjects = useQuery(api.projects.get) || [];
+    const allProjects = [...convexProjects, ...ALL_PROJECTS] as any[];
+
     const filteredProjects = useMemo(() => {
-        return ALL_PROJECTS.filter(project => {
+        return allProjects.filter(project => {
             const matchesSearch = project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                project.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
+                project.tags.some((tag: string) => tag.toLowerCase().includes(searchTerm.toLowerCase()));
             const matchesCategory = activeCategory === "All" || project.category === activeCategory;
 
             return matchesSearch && matchesCategory;
         });
-    }, [searchTerm, activeCategory]);
+    }, [searchTerm, activeCategory, allProjects]);
 
     return (
         <div className="container" style={{ paddingTop: '8rem', paddingBottom: '4rem' }}>
@@ -132,7 +137,7 @@ const AllProjects = () => {
                 <AnimatePresence>
                     {filteredProjects.map((project) => (
                         <motion.div
-                            key={project.id}
+                            key={project._id || project.id}
                             layout
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
@@ -141,7 +146,7 @@ const AllProjects = () => {
                             className={styles.masonryItem}
                         >
                             <GalleryCard
-                                id={project.id}
+                                id={project._id || project.id}
                                 title={project.title}
                                 description={project.description}
                                 imageUrl={project.imageUrl}
