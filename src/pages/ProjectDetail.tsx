@@ -1,6 +1,6 @@
 import { useParams, Link } from 'react-router-dom';
 import BackButton from '../components/ui/BackButton';
-import ParallaxCarousel from '../components/ui/ParallaxCarousel';
+import GalleryStack from '../components/ui/GalleryStack';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
 import { useQuery } from "convex/react";
@@ -136,9 +136,9 @@ const ProjectDetail = () => {
                         </p>
 
                         {project.gallery && project.gallery.length > 0 && (
-                            <div style={{ margin: '2rem 0' }}>
+                            <div style={{ margin: '4rem 0' }}>
                                 <h3 style={{ fontSize: '1.5rem', marginBottom: '2rem' }}>Gallery</h3>
-                                <ParallaxCarousel images={project.gallery} />
+                                <GalleryStack images={project.gallery} />
                             </div>
                         )}
                     </motion.div>
