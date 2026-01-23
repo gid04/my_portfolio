@@ -8,50 +8,11 @@ import { api } from "../../convex/_generated/api";
 import type { Id } from "../../convex/_generated/dataModel";
 
 // Using the same dummy data logic or moving to a context would be better, but keeping simple for now.
-const DUMMY_PROJECTS = [
-    {
-        id: "1",
-        title: 'Fintech Dashboard',
-        description: 'A comprehensive dashboard for managing financial assets.',
-        fullDescription: 'This fintech dashboard allows users to track their assets, view real-time market data, and manage their portfolio with ease. The design focuses on clarity and data legibility, using a strict monochrome palette to reduce cognitive load.',
-        imageUrl: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2670&auto=format&fit=crop',
-        tags: ['UI/UX', 'Dashboard', 'Fintech'],
-        link: '#'
-    },
-    {
-        id: "2",
-        title: 'E-commerce App',
-        description: 'Mobile-first shopping experience with seamless checkout.',
-        fullDescription: 'Designed for a seamless shopping experience on mobile devices. Key features include one-click checkout, personalized recommendations, and a clean product discovery interface.',
-        imageUrl: 'https://images.unsplash.com/photo-1523206485973-279961db41e3?q=80&w=2670&auto=format&fit=crop',
-        tags: ['Mobile App', 'E-commerce', 'React Native'],
-        link: '#'
-    },
-    {
-        id: "3",
-        title: 'Travel Agency',
-        description: 'Immersive travel booking platform with virtual tours.',
-        fullDescription: 'An immersive web platform that lets users explore destinations through virtual tours before booking. The design uses large typography and high-quality imagery to inspire travel.',
-        imageUrl: 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=2621&auto=format&fit=crop',
-        tags: ['Web Design', 'Travel', 'Minimalism'],
-        link: '#'
-    }
-];
-
 const ProjectDetail = () => {
     const { id } = useParams();
     const containerRef = useRef(null);
 
-    // Determines if ID is a valid Convex ID (usually longer alphanumeric) vs Dummy ID (short numeric string)
-    // This is a naive check. 
-    const isConvexId = id && id.length > 5;
-
-    const convexProject = useQuery(api.projects.getById, isConvexId ? { id: id as Id<"projects"> } : "skip");
-
-    // Fallback to dummy
-    const dummyProject = DUMMY_PROJECTS.find(p => p.id === id);
-
-    const project = (isConvexId ? convexProject : dummyProject) as any;
+    const project = useQuery(api.projects.getById, { id: id as Id<"projects"> });
 
     const { scrollYProgress } = useScroll({ target: containerRef });
     const y = useTransform(scrollYProgress, [0, 1], [0, 200]);
