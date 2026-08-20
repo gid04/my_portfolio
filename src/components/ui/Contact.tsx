@@ -8,15 +8,30 @@ const Contact = () => {
                 <h2 style={{ fontSize: 'clamp(2.5rem, 6vw, 5rem)', marginBottom: '3rem', lineHeight: 1.1 }}>
                     Let's work together.
                 </h2>
-                <a href="mailto:hged04@gmail.com" style={{
-                    fontSize: '1.5rem',
-                    borderBottom: '1px solid #fff',
-                    paddingBottom: '0.5rem',
-                    display: 'inline-block',
+                <div style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: '1rem',
                     marginBottom: '4rem'
                 }}>
-                    hged04@gmail.com
-                </a>
+                    <a href="mailto:hged04@gmail.com" style={{
+                        fontSize: '1.5rem',
+                        borderBottom: '1px solid #fff',
+                        paddingBottom: '0.5rem',
+                        display: 'inline-block'
+                    }}>
+                        hged04@gmail.com
+                    </a>
+                    <a href="mailto:contact@vantar-holdings.com" style={{
+                        fontSize: '1.5rem',
+                        borderBottom: '1px solid #fff',
+                        paddingBottom: '0.5rem',
+                        display: 'inline-block'
+                    }}>
+                        contact@vantar-holdings.com
+                    </a>
+                </div>
 
                 <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem', opacity: 0.7 }}>
                     <a href="https://www.linkedin.com/in/g04/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
