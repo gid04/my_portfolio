@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Analytics } from '@vercel/analytics/react';
 import { ThemeProvider } from './context/ThemeContext';
 import Layout from './components/layout/Layout';
 import Home from './pages/Home';
@@ -38,6 +39,7 @@ function App() {
             <Route path="/service/:id" element={<ServiceDetail />} />
           </Routes>
         </Layout>
+        <Analytics />
       </Router>
     </ThemeProvider>
   );
